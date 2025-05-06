@@ -2,7 +2,7 @@
 const StudentDashboard = () => {
     return (
         <>
-        
+            <h1>student dashboard</h1>
         </>
     )
 }

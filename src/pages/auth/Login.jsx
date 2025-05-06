@@ -32,7 +32,13 @@ const Login = () => {
                 return;
             };
             alert("login successfully");
-            navigate("/login");
+            if (data.profile.role === "TEACHER") {
+                navigate("/teacher/dashboard");
+            } else if (data.profile.role === "STUDENT") {
+                navigate("/student/dashboard");
+            } else {
+                alert("role not set");
+            }
         } catch (error) {
            console.error("Error logging in:", error);
            const errorMessage = error.response?.data?.message || "invalid email or password";
