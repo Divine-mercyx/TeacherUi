@@ -6,7 +6,7 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const url = "https://api.example.com/signup";
+    const url = "http://localhost:8080/api/auth/register";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
