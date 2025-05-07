@@ -1,13 +1,15 @@
-import { useState } from "react"
+import {useContext, useState} from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { addToken } from "../../utils/db"
+import {UserContext} from "../../contexts/UserContext.jsx";
 
 const Login = () => {
+    const [user, setUser] = useContext(UserContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const url = "http://localhost:8080/api/auth/login";
+    const url = "http://localhost:8081/api/auth/login";
 
     const sendData = async (dataToken) => {
         await addToken(dataToken);
@@ -19,19 +21,19 @@ const Login = () => {
 
         try {
             const { data } = await axios.post(url, {email, password});
-            console.log(data);
-            console.log(data.email);
             const dataToken = {
                 id: 1,
                 mainId: data.id,
                 token: data.token
             };
-            sendData(dataToken);
+            await sendData(dataToken);
             if (data.profile == null) {
                 navigate("/profile/setup");
                 return;
-            };
+            }
             alert("login successfully");
+            setUser(data);
+            localStorage.setItem("status", JSON.stringify("login"));
             if (data.profile.role === "TEACHER") {
                 navigate("/teacher/dashboard");
             } else if (data.profile.role === "STUDENT") {

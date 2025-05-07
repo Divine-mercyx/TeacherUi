@@ -6,25 +6,19 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const url = "http://localhost:8080/api/auth/register";
+    const url = "http://localhost:8081/api/auth/register";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const { data } = await axios.post(url, {email, password});
-            console.log(data);
+            await axios.post(url, {email, password});
             alert("Account created successfully");
             navigate("/login");
         } catch (error) {
             console.error("Error creating account", error);
             const errorMessage = error.response?.data?.message || "error creating account";
             alert(errorMessage);
-            // if (error.response.status === 400) {
-            //     alert("Bad Request: Please check your input");
-            // } else if (error.response.status === 500) {
-            //     alert("Server Error: Please try again later");
-            // }
         }
     }
 

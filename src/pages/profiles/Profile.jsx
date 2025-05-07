@@ -1,9 +1,11 @@
-import {useState} from "react";
-import {addUser, getToken, deleteToken} from "../../utils/db";
+import {useContext, useState} from "react";
+import {getToken, deleteToken} from "../../utils/db";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {UserContext} from "../../contexts/UserContext.jsx";
 
 const Profile = () => {
+    const [user, setUser] = useContext(UserContext);
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [role, setRole] = useState("");
@@ -13,11 +15,7 @@ const Profile = () => {
 
     const fetchData = async () => {
         return await getToken(1)
-      };
-
-    const sendData = async (user) => {
-        await addUser(user);
-    }
+    };
 
     const deleteAllToken = async (id) => {
         await deleteToken(id);
@@ -27,7 +25,6 @@ const Profile = () => {
         e.preventDefault();
         try {
             const dataToken = await fetchData();
-
             if (dataToken === undefined) {
                 alert("profile already setup by you!.");
                 return;
@@ -45,12 +42,12 @@ const Profile = () => {
             };
 
             const { data } = await axios.post(url, payload);
-            sendData(data);
-            deleteAllToken(1);
+            setUser(data);
+            await deleteAllToken(1);
 
             alert("profile update successful")
             const roles = data?.profile?.role;
-
+            localStorage.setItem("status", JSON.stringify("login"));
             switch (roles) {
                 case "TEACHER":
                     navigate("/teacher/dashboard");
